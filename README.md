@@ -6,36 +6,33 @@ Projet de prévision de paramètres de qualité de l'eau à partir de mesures en
 
 Prédire plusieurs indicateurs de qualité de l'eau :
 
-- Total Alkalinity
-- Electrical Conductance
-- Dissolved Reactive Phosphorus
-
 ## Données
-
-- Mesures de qualité de l'eau
-- Variables satellitaires Landsat
-- Variables climatiques TerraClimate
-- Coordonnées géographiques et dates d'échantillonnage
 
 ## Méthodes
 
-- Fusion de sources multi-capteurs et multi-temporelles
-- Variables temporelles et saisonnières
-- Indices spectraux : NDVI, EVI, SAVI, NDWI et NBR
-- Feature engineering géospatial
-- Gestion des valeurs aberrantes
-- Validation GroupKFold
-- Comparaison de Ridge, Random Forest, Gradient Boosting, XGBoost et LightGBM
-- Ensembles de modèles et sauvegarde des pipelines
+## Structure
 
 ## Structure
 
-- `code/` : données et notebooks du challenge
-- `Jupyter Notebook Package/` : extraction et démonstration Landsat/TerraClimate
-- `models/` et `models_advanced/` : modèles et pipelines sauvegardés
-- `EY_Water_Quality_Advanced_Solution.py` : pipeline avancé
+- `data/raw/` : données qualité de l'eau, Landsat et TerraClimate
+- `notebooks/data_extraction/` : extraction et démonstration des données environnementales
+- `notebooks/water_quality/` : variantes des notebooks de modélisation
+- `notebooks/experiments/` : expérience séparée de classification CIFAR
+- `src/ey_water_quality_pipeline.py` : pipeline avancé reproductible
+- `models/baseline/` : modèles de référence
+- `models/ensemble/` : modèles ensemblistes
+- `models/advanced/` : pipelines avancés par cible
+- `submissions/` : prédictions générées et templates
+- `docs/` : guide du challenge et métadonnées
 - `submission_advanced_pipeline.csv` : prédictions produites
 
 ## Reproductibilité
 
+Les notebooks de modélisation doivent être exécutés depuis leur emplacement dans `notebooks/water_quality/`. Le pipeline Python principal peut être lancé depuis n'importe quel répertoire :
+
+```bash
+python3 src/ey_water_quality_pipeline.py
+```
+
+Les dépendances principales sont Python, Pandas, NumPy, scikit-learn, XGBoost, LightGBM, Joblib, GeoPandas, Rasterio et Xarray.
 Les chemins de données utilisés par certains notebooks correspondent à l'organisation du dossier `code/`. Les dépendances principales sont Python, Pandas, NumPy, scikit-learn, XGBoost, LightGBM, GeoPandas, Rasterio et Xarray.

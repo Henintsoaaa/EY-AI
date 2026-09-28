@@ -40,9 +40,14 @@ from sklearn.linear_model import Ridge
 
 import joblib
 import os
+from pathlib import Path
 from typing import Dict, List, Tuple
 
 # Configuration
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+DATA_DIR = PROJECT_ROOT / 'data' / 'raw'
+SUBMISSIONS_DIR = PROJECT_ROOT / 'submissions'
+MODELS_DIR = PROJECT_ROOT / 'models' / 'advanced'
 plt.style.use('seaborn-v0_8-darkgrid')
 sns.set_palette("husl")
 pd.set_option('display.max_columns', None)
@@ -225,13 +230,13 @@ def load_all_data():
     print("=" * 80)
     
     # Training data
-    water_quality_train = pd.read_csv('water_quality_training_dataset.csv')
-    landsat_train = pd.read_csv('landsat_features_training.csv')
-    terraclimate_train = pd.read_csv('terraclimate_features_training.csv')
+    water_quality_train = pd.read_csv(DATA_DIR / 'water_quality_training_dataset.csv')
+    landsat_train = pd.read_csv(DATA_DIR / 'landsat_features_training.csv')
+    terraclimate_train = pd.read_csv(DATA_DIR / 'terraclimate_features_training.csv')
     
     # Validation data
-    landsat_val = pd.read_csv('landsat_features_validation.csv')
-    terraclimate_val = pd.read_csv('terraclimate_features_validation.csv')
+    landsat_val = pd.read_csv(DATA_DIR / 'landsat_features_validation.csv')
+    terraclimate_val = pd.read_csv(DATA_DIR / 'terraclimate_features_validation.csv')
     
     print(f"\n✅ Données chargées:")
     print(f"   - Water Quality: {water_quality_train.shape}")
@@ -743,11 +748,11 @@ def main():
             print(f"   ✅ {col}: [{col_min:.2f}, {col_max:.2f}]")
     
     # Sauvegarde
-    submission_filename = 'submission_advanced_pipeline.csv'
-    submission.to_csv(submission_filename, index=False)
+    submission_path = SUBMISSIONS_DIR / 'submission_advanced_pipeline.csv'
+    submission.to_csv(submission_path, index=False)
     
     print(f"\n{'='*80}")
-    print(f"✅ FICHIER DE SOUMISSION CRÉÉ: {submission_filename}")
+    print(f"✅ FICHIER DE SOUMISSION CRÉÉ: {submission_path}")
     print(f"{'='*80}")
     print(f"\nScore attendu sur le leaderboard:")
     mean_score = np.mean([info['score'] for info in best_models.values()])
@@ -755,11 +760,11 @@ def main():
     print(f"\n🚀 PRÊT POUR UPLOAD SUR LE LEADERBOARD!")
     
     # 8. Sauvegarde des modèles
-    os.makedirs('models_advanced', exist_ok=True)
+    MODELS_DIR.mkdir(parents=True, exist_ok=True)
     for target_name, pipeline in final_pipelines.items():
-        filename = f"models_advanced/{target_name.replace(' ', '_')}_pipeline.pkl"
-        joblib.dump(pipeline, filename)
-        print(f"   ✅ Sauvegardé: {filename}")
+        model_path = MODELS_DIR / f"{target_name.replace(' ', '_')}_pipeline.pkl"
+        joblib.dump(pipeline, model_path)
+        print(f"   ✅ Sauvegardé: {model_path}")
     
     print("\n" + "=" * 80)
     print("FIN DU PIPELINE")
